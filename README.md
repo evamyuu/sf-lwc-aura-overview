@@ -2,6 +2,8 @@
 
 > *"Entender o passado é como ter um mapa do tesouro: você sabe onde não pisar mais, mas ainda pode usar as pistas antigas pra chegar ao ouro novo."*
 
+<img src="./banner.png" alt="Banner" style="width: 100%; display: block; margin: 0;">
+
 ---
 
 ## Sumário
@@ -1070,5 +1072,7 @@ Com muito carinho,
 🌈 **Gabs Barboza** & 🌸 **Eve** agradecem a sua participação nesse treinamento! 
 
 Que você domine tanto o passado (Aura) quanto o futuro (LWC) com maestria e confiança. Seguimos juntos construindo interfaces incríveis! 🚀
+
+<img src="./footer.png" alt="footer" style="width: 100%; display: block; margin: 0;">
 
 ---
