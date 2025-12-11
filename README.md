@@ -1073,6 +1073,6 @@ Com muito carinho,
 
 Que você domine tanto o passado (Aura) quanto o futuro (LWC) com maestria e confiança. Seguimos juntos construindo interfaces incríveis! 🚀
 
-<img src="./footer.png" alt="footer" style="width: 100%; display: block; margin: 0;">
+<img src="./footer.jpg" alt="footer" style="width: 100%; display: block; margin: 0;">
 
 ---
