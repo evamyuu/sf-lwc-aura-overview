@@ -8,10 +8,16 @@
 
 ## Sumário
 
-- [Entendendo Aura Components](#entendendo-aura-components)
+- [O Passado: Entendendo Aura Components](#o-passado-entendendo-aura-components)
   - [O que são Aura Components?](#o-que-são-aura-components)
   - [Estrutura de um Bundle Aura](#estrutura-de-um-bundle-aura)
   - [Arquivos do Bundle](#arquivos-do-bundle)
+    - [1. Component (.cmp) — Obrigatório](#1-component-cmp--obrigatório)
+    - [2. Controller (.js) — Opcional mas Comum](#2-controller-js--opcional-mas-comum)
+    - [3. Helper (.js) — Onde a Mágica Acontece](#3-helper-js--onde-a-mágica-acontece)
+    - [4. Renderer (.js) — Customização de Renderização](#4-renderer-js--customização-de-renderização)
+    - [5. Style (.css) — Estilos Encapsulados](#5-style-css--estilos-encapsulados)
+    - [6. Design (.design) — Configuração para App Builder](#6-design-design--configuração-para-app-builder)
 - [Aura vs LWC: A Grande Comparação](#aura-vs-lwc-a-grande-comparação)
   - [Filosofia e Arquitetura](#filosofia-e-arquitetura)
   - [Performance](#performance)
@@ -23,22 +29,42 @@
 - [Convivência: Aura e LWC no mesmo App](#convivência-aura-e-lwc-no-mesmo-app)
 - [Migrando de Aura para LWC](#migrando-de-aura-para-lwc)
 - [Salesforce Lightning Design System (SLDS)](#salesforce-lightning-design-system-slds)
+  - [O que é um Design System?](#o-que-é-um-design-system)
   - [O que é SLDS?](#o-que-é-slds)
   - [SLDS 1 vs SLDS 2](#slds-1-vs-slds-2)
   - [Elementos Fundamentais do SLDS](#elementos-fundamentais-do-slds)
+    - [1. Design Tokens: Variáveis que falam a mesma língua](#1-design-tokens-variáveis-que-falam-a-mesma-língua)
+    - [2. Utility Classes: Atalhos visuais prontos](#2-utility-classes-atalhos-visuais-prontos)
+    - [3. Component Blueprints: Receitas visuais prontas](#3-component-blueprints-receitas-visuais-prontas)
+    - [4. Guidelines: Padrões de UX](#4-guidelines-padrões-de-ux)
+  - [SLDS 2: A Nova Geração](#slds-2-a-nova-geração)
+    - [O que mudou no SLDS 2?](#o-que-mudou-no-slds-2)
+    - [Styling Hooks: Customização sem medo](#styling-hooks-customização-sem-medo)
+    - [Como ativar SLDS 2?](#como-ativar-slds-2)
+    - [Benefícios do SLDS 2](#benefícios-do-slds-2)
+    - [Principais Styling Hooks](#principais-styling-hooks)
+  - [Quando usar SLDS 1 vs SLDS 2?](#quando-usar-slds-1-vs-slds-2)
   - [Usando SLDS em LWC](#usando-slds-em-lwc)
   - [Acessibilidade First: Design para Todos](#acessibilidade-first-design-para-todos)
-- [Troubleshooting Avançado](#troubleshooting-avançado)
+    - [WCAG: O Guia da Acessibilidade](#wcag-o-guia-da-acessibilidade)
+    - [Os 4 Princípios do WCAG (POUR)](#os-4-princípios-do-wcag-pour)
+  - [Dicas](#dicas)
+- [Troubleshooting: Quando as coisas dão errado](#troubleshooting-quando-as-coisas-dão-errado)
   - [Debug Mode](#debug-mode)
-  - [Chrome DevTools](#chrome-devtools)
-  - [Breakpoints](#breakpoints)
-  - [Network Analysis](#network-analysis)
-  - [Performance Profiling](#performance-profiling)
+  - [Chrome DevTools: Seu melhor amigo](#chrome-devtools-seu-melhor-amigo)
+  - [Breakpoints: Parando o Tempo](#breakpoints-parando-o-tempo)
+    - [1. Line-of-code Breakpoint](#1-line-of-code-breakpoint)
+    - [2. Conditional Breakpoint](#2-conditional-breakpoint)
+    - [3. DOM Breakpoints](#3-dom-breakpoints)
 - [Boas Práticas](#boas-práticas)
+  - [Troubleshooting](#troubleshooting)
+  - [Aura vs LWC](#aura-vs-lwc)
+  - [SLDS](#slds)
+  - [Performance](#performance-1)
 
 ---
 
-## Entendendo Aura Components
+## O Passado: Entendendo Aura Components
 
 ### O que são Aura Components?
 
@@ -76,7 +102,7 @@ meuComponente/
 
 ### Arquivos do Bundle
 
-#### 1. **Component (.cmp)** — Obrigatório
+#### 1. Component (.cmp) — Obrigatório
 
 O arquivo `.cmp` é o coração do componente Aura. Ele define a estrutura visual usando uma sintaxe XML-like proprietária.
 
@@ -105,7 +131,7 @@ O arquivo `.cmp` é o coração do componente Aura. Ele define a estrutura visua
 
 ---
 
-#### 2. **Controller (.js)** — Opcional mas Comum
+#### 2. Controller (.js) — Opcional mas Comum
 
 O Controller é onde você define **métodos chamados diretamente pelo markup**. Ele age como intermediário entre a interface e a lógica de negócio.
 
@@ -129,7 +155,7 @@ O Controller é onde você define **métodos chamados diretamente pelo markup**.
 
 ---
 
-#### 3. **Helper (.js)** — Onde a Mágica Acontece
+#### 3. Helper (.js) — Onde a Mágica Acontece
 
 O Helper contém a **lógica de negócio real**. É aqui que você:
 - Faz chamadas Apex
@@ -169,13 +195,13 @@ O Helper contém a **lógica de negócio real**. É aqui que você:
 
 ---
 
-#### 4. **Renderer (.js)** — Customização de Renderização
+#### 4. Renderer (.js) — Customização de Renderização
 
 Raramente usado, o Renderer permite controlar **como** o componente é renderizado no DOM. Útil para casos edge de manipulação direta do DOM.
 
 ---
 
-#### 5. **Style (.css)** — Estilos Encapsulados
+#### 5. Style (.css) — Estilos Encapsulados
 
 CSS específico do componente. Estilos aqui não vazam para outros componentes (encapsulamento).
 
@@ -190,7 +216,7 @@ CSS específico do componente. Estilos aqui não vazam para outros componentes (
 
 ---
 
-#### 6. **Design (.design)** — Configuração para App Builder
+#### 6. Design (.design) — Configuração para App Builder
 
 Define quais atributos podem ser configurados visualmente no App Builder.
 
@@ -452,7 +478,7 @@ Migração não é conversão linha por linha — é uma oportunidade para simpl
 
 ## Salesforce Lightning Design System (SLDS)
 
-> "Design não é só como parece. Design é como funciona." - Steve Jobs>
+> "Design não é só como parece. Design é como funciona." - Steve Jobs
 
 ### O que é um Design System?
 
@@ -467,7 +493,7 @@ Pense assim: se cada desenvolvedor criasse botões do seu jeito, teríamos cente
 - **Patterns**: Soluções comuns para problemas recorrentes
 - **Accessibility Standards**: Padrões de acessibilidade
 
-## O que é SLDS?
+### O que é SLDS?
 
 SLDS é um Design System que permite dividir a UI em partes reutilizáveis, organizadas, independentes e fáceis de manter. É o conjunto de diretrizes, componentes e tokens visuais que garantem consistência em toda a plataforma Salesforce.
 
@@ -479,7 +505,7 @@ SLDS é um Design System que permite dividir a UI em partes reutilizáveis, orga
 
 ---
 
-## SLDS 1 vs SLDS 2
+### SLDS 1 vs SLDS 2
 
 SLDS 2 foi introduzido na Spring '25 como a nova versão do design system, trazendo melhorias significativas.
 
@@ -494,13 +520,13 @@ SLDS 2 foi introduzido na Spring '25 como a nova versão do design system, traze
 
 ---
 
-## Elementos Fundamentais do SLDS
+### Elementos Fundamentais do SLDS
 
 SLDS é composto por quatro elementos fundamentais: **Design Tokens**, **Utility Classes**, **Component Blueprints** e **Guidelines**.
 
 ---
 
-### 1. Design Tokens: Variáveis que falam a mesma língua
+#### 1. Design Tokens: Variáveis que falam a mesma língua
 
 **O que são**: Design Tokens são variáveis que armazenam valores de design como cores, espaçamentos, tamanhos de fonte e mais. Eles garantem consistência visual em toda a plataforma.
 
@@ -518,7 +544,7 @@ SLDS é composto por quatro elementos fundamentais: **Design Tokens**, **Utility
 
 ---
 
-### 2. Utility Classes: Atalhos visuais prontos
+#### 2. Utility Classes: Atalhos visuais prontos
 
 **O que são**: Utility classes são classes CSS prontas para aplicar espaçamentos, alinhamentos, cores e mais — sem escrever uma linha de CSS customizado.
 
@@ -549,7 +575,7 @@ SLDS é composto por quatro elementos fundamentais: **Design Tokens**, **Utility
 
 ---
 
-### 3. Component Blueprints: Receitas visuais prontas
+#### 3. Component Blueprints: Receitas visuais prontas
 
 **O que são**: Blueprints são **estruturas de marcação HTML/CSS prontas** que você copia e cola. Eles **NÃO são componentes Lightning** (como `<lightning-card>`), mas sim o **código HTML puro** que define como algo deve parecer visualmente.
 
@@ -579,7 +605,7 @@ SLDS é composto por quatro elementos fundamentais: **Design Tokens**, **Utility
 
 ---
 
-### 4. Guidelines: Padrões de UX
+#### 4. Guidelines: Padrões de UX
 
 **O que são**: Diretrizes de experiência do usuário e padrões de interação que ensinam **quando** e **como** usar cada componente (modais, toasts, tabs, etc.).
 
@@ -592,9 +618,9 @@ SLDS é composto por quatro elementos fundamentais: **Design Tokens**, **Utility
 
 ---
 
-## SLDS 2: A Nova Geração
+### SLDS 2: A Nova Geração
 
-### O que mudou no SLDS 2?
+#### O que mudou no SLDS 2?
 
 SLDS 2 introduz **Styling Hooks** — CSS Custom Properties que permitem customizar componentes Base Lightning sem quebrar o design system.
 
@@ -689,7 +715,7 @@ lightning-button {
 
 ---
 
-## Quando usar SLDS 1 vs SLDS 2?
+### Quando usar SLDS 1 vs SLDS 2?
 
 | Cenário | Recomendação |
 |---------|--------------|
@@ -750,7 +776,8 @@ lightning-button {
 O SLDS foi construído com acessibilidade como prioridade número um, não como "algo a ser adicionado depois". Todos os componentes seguem **WCAG 2.1 Level AA**.
 
 **WCAG** (Web Content Accessibility Guidelines) é o padrão internacional para acessibilidade web, garantindo que pessoas com deficiências possam usar a web.
-### WCAG: O Guia da Acessibilidade
+
+#### WCAG: O Guia da Acessibilidade
 
 **WCAG (Web Content Accessibility Guidelines)** é o conjunto de diretrizes globais que definem como tornar conteúdo web acessível. Criado pelo W3C (World Wide Web Consortium), é seguido mundialmente.
 
@@ -939,7 +966,7 @@ O Chrome DevTools é sua ferramenta mais poderosa para debugar LWCs. Ele oferece
 
 ---
 
-#### 2. **Console** — Logs e Execução de Código
+**Console — Logs e Execução de Código:**
 ```javascript
 // Teste expressões JavaScript
 console.log(this.dados);
@@ -955,7 +982,7 @@ console.table(this.listaItens);
 
 ---
 
-#### 3. **Sources** — Navegação e Debug de Código
+**Sources — Navegação e Debug de Código:**
 
 **Localizar Seu Componente:**
 1. Abra o painel **Sources**
@@ -980,7 +1007,7 @@ Breakpoints permitem pausar a execução do JavaScript. Enquanto pausado, você 
 
 **Tipos de Breakpoints:**
 
-#### 1. **Line-of-code Breakpoint**
+#### 1. Line-of-code Breakpoint
 Pausa antes de uma linha específica executar.
 
 **Como Adicionar:**
@@ -1005,7 +1032,7 @@ handleIncrement(event) {
 
 ---
 
-#### 2. **Conditional Breakpoint**
+#### 2. Conditional Breakpoint
 Pausa apenas quando uma condição é verdadeira.
 
 **Como Adicionar:**
@@ -1023,7 +1050,7 @@ handleClick() {
 
 ---
 
-#### 3. **DOM Breakpoints**
+#### 3. DOM Breakpoints
 Pausa quando o DOM muda (elemento modificado, filho adicionado/removido).
 
 **Como Adicionar:**
