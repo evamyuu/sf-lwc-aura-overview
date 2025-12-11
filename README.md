@@ -1,6 +1,6 @@
 # Aula 3: Aura x LWCs - O passado que assombra o futuro que encanta
 
-> *"Entender o passado é como ter um mapa do tesouro: você sabe onde não pisar mais, mas ainda pode usar as pistas antigas pra chegar ao ouro novo."*
+Todo futuro encantador carrega fantasmas do passado. E no mundo dos componentes Lightning, esse fantasma tem nome: **Aura**. Ele é o passado que lembra como tudo começou, e o **LWC** é o futuro que mostra aonde tudo pode chegar.
 
 <img src="./banner.png" alt="Banner" style="width: 100%; display: block; margin: 0;">
 
