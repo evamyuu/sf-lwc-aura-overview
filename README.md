@@ -76,7 +76,16 @@ Em 2014, os padrões web modernos ainda estavam em desenvolvimento. A Web não t
 
 Pense assim: Aura é como construir uma casa com ferramentas customizadas que você mesmo fabricou. Funciona, mas exige que você aprenda o jeito específico de usar essas ferramentas.
 
+**Razões para conhecer Aura:**
+- **Legado vivo:** Milhares de componentes em produção
+- **Manutenção:** Você precisará dar suporte a código existente
+- **Migração:** Entender Aura facilita a transição para LWC
+- **Interoperabilidade:** Aura e LWC podem trabalhar juntos
+- **Contexto histórico:** Compreender a evolução tecnológica
+
 💡 **Aura foi essencial para a evolução do Salesforce Lightning, mas hoje é considerado legado.**
+
+**Documentação Oficial:** [Lightning Aura Components Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.lightning.meta/lightning/intro_components.htm)
 
 ---
 
@@ -120,14 +129,12 @@ O arquivo `.cmp` é o coração do componente Aura. Ele define a estrutura visua
 ```
 
 **Características:**
-- Usa `<aura:attribute>` para declarar variáveis
-- Acessa atributos com `{!v.nomeDoAtributo}`
-- Chama métodos do controller com `{!c.nomeDoMetodo}`
-- Sintaxe proprietária da Salesforce (não é HTML puro)
-
-**Pulo do Gato:**
-- O `implements` define onde o componente pode ser usado (App Builder, Quick Actions, etc.)
-- `access="global"` permite que outros namespaces usem seu componente
+- **`<aura:component>`**: Tag raiz que define o componente
+- **`<aura:attribute>`**: Declara uma propriedade do componente (equivalente a variáveis públicas no LWC)
+- **`implements`**: Define interfaces que o componente implementa (onde pode ser usado)
+- **`access`**: Define visibilidade do componente (global, public, private)
+- **Value Provider (`{!v.}`**: Sintaxe para acessar valores de atributos do componente
+- **`{!c.methodName}`**: Referencia método do Controller
 
 ---
 
@@ -149,6 +156,13 @@ O Controller é onde você define **métodos chamados diretamente pelo markup**.
 - Deve apenas receber eventos e delegar ao Helper
 - Se você colocar lógica aqui, vai ter problemas de manutenção
 
+**Características:**
+- **`component`**: Objeto que representa a instância do componente
+- **`component.get("v.attribute")`**: Lê valor de um atributo
+- **`component.set("v.attribute", value)`**: Define valor de um atributo
+- **`event`**: Objeto do evento que disparou a ação
+- **`helper`**: Referência ao arquivo Helper do componente
+  
 **Pulo do Gato:**
 - Pense no Controller como um **porteiro**: ele só recebe visitantes (eventos) e os direciona para o Helper
 - Nunca coloque lógica complexa no Controller — sempre use o Helper
@@ -187,11 +201,13 @@ O Helper contém a **lógica de negócio real**. É aqui que você:
 - Helpers podem chamar outros métodos do Helper
 - É reutilizável em múltiplos métodos do Controller
 - Mantém código organizado e testável
-
-**Pulo do Gato:**
 - Helpers podem ser chamados de qualquer lugar do componente
-- Use `$A.enqueueAction()` para chamadas assíncronas ao Apex
-- Sempre valide `response.getState()` antes de processar dados
+- **`component.get("c.methodName")`**: Obtém método Apex do controller (c = controller Apex)
+- **`action.setParams()`**: Define parâmetros da chamada Apex
+- **`action.setCallback()`**: Define função a ser executada após resposta
+- **`$A.enqueueAction()`**: Enfileira ação assíncrona para execução
+- **`response.getState()`**: Retorna estado da resposta ("SUCCESS", "ERROR", "INCOMPLETE")
+- **`response.getReturnValue()`**: Obtém valor retornado pelo método Apex
 
 ---
 
@@ -225,6 +241,75 @@ Define quais atributos podem ser configurados visualmente no App Builder.
     <design:attribute name="mensagem" label="Mensagem Inicial" description="Texto exibido ao carregar"/>
 </design:component>
 ```
+---
+
+### Handlers e Value Providers
+
+**Handlers** são formas de escutar eventos e executar ações em resposta.
+
+```html
+<!-- Handler de inicialização -->
+<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+<!-- Handler de evento customizado -->
+<aura:handler name="notify" event="c:NotificationEvent" action="{!c.handleNotification}"/>
+
+<!-- Handler de mudança de atributo -->
+<aura:handler name="change" value="{!v.recordId}" action="{!c.onRecordChange}"/>
+
+<!-- Handler de evento de aplicação -->
+<aura:handler event="force:refreshView" action="{!c.handleRefresh}"/>
+```
+
+**Value Providers** são formas de acessar diferentes tipos de dados:
+
+| Value Provider | Uso | Exemplo |
+|----------------|-----|---------|
+| **`{!v.}`** | Atributos do componente | `{!v.message}` |
+| **`{!c.}`** | Métodos do Controller | `{!c.handleClick}` |
+| **`{!m.}`** | Métodos do Helper | Raramente usado diretamente |
+| **`{!$Label.}`** | Custom Labels | `{!$Label.c.HelloMessage}` |
+| **`{!$Resource.}`** | Static Resources | `{!$Resource.MyLogo}` |
+
+---
+
+### O Ciclo de Vida do Aura
+
+Aura possui eventos de ciclo de vida que disparam em momentos específicos. Compreender esses momentos é crucial para escrever lógica no timing correto.
+
+| Evento | Quando Dispara | Uso Comum | Equivalente LWC |
+|--------|----------------|-----------|-----------------|
+| **init** | Componente carregado pela primeira vez | Buscar dados iniciais, setup inicial | `connectedCallback()` |
+| **render** | Antes de renderizar no DOM | Customizar renderização (raro) | — |
+| **afterRender** | Após renderizar no DOM | Inicializar bibliotecas JS externas | `renderedCallback()` |
+| **rerender** | Componente re-renderiza | Atualizar estado visual | `renderedCallback()` |
+| **unrender** | Antes de remover do DOM | Limpar timers, event listeners | `disconnectedCallback()` |
+
+**Exemplo de uso:**
+```html
+<aura:component>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="destroy" value="{!this}" action="{!c.cleanup}"/>
+    
+    <!-- Conteúdo -->
+</aura:component>
+```
+
+```javascript
+({
+    doInit: function(component, event, helper) {
+        // Setup inicial
+        console.log('Componente inicializado');
+        helper.loadInitialData(component);
+    },
+    
+    cleanup: function(component, event, helper) {
+        // Limpeza antes de destruir
+        console.log('Componente sendo destruído');
+        // Limpar timers, listeners, etc
+    }
+})
+```
 
 ---
 
@@ -238,28 +323,6 @@ Define quais atributos podem ser configurados visualmente no App Builder.
 | **Camada de Abstração** | Alta — Framework customizado | Baixa — JavaScript vanilla + Web APIs |
 | **Sintaxe** | XML-like proprietária | HTML + JavaScript moderno |
 | **Curva de Aprendizado** | Íngreme (sintaxe única) | Suave (padrões web conhecidos) |
-
-**Analogia:**
-- **Aura** = Dirigir um carro automático customizado — funciona bem, mas só naquela marca
-- **LWC** = Dirigir um carro padrão — o que você aprende serve em qualquer veículo
-
----
-
-### Performance
-
-Lightning Web Components performa melhor que Aura Components, principalmente porque:
-
-1. **Sem camada de abstração pesada** — LWC roda direto no navegador
-2. **Renderização mais rápida** — usa Shadow DOM nativo
-3. **Bundle menor** — menos código para o navegador processar
-4. **Inicialização mais rápida** — componentes são mais leves
-
-**Dados:**
-- Aura: inicialização ~200ms (componente complexo)
-- LWC: inicialização ~50ms (componente equivalente)
-
-**Pulo do Gato:**
-Em aplicações grandes com muitos componentes, a diferença de performance entre Aura e LWC pode ser de **30-50%** mais rápido no LWC.
 
 ---
 
