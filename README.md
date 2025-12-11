@@ -935,7 +935,7 @@ O Chrome DevTools é sua ferramenta mais poderosa para debugar LWCs. Ele oferece
 | **Performance** | Perfil de performance | — | Identificar gargalos |
 | **Memory** | Análise de memória | — | Debug de memory leaks |
 
-**Documentação**: [Debug JavaScript]([https://www.lightningdesignsystem.com/utilities/alignment/](https://developer.chrome.com/docs/devtools/javascript)
+**Documentação**: [Debug JavaScript](https://developer.chrome.com/docs/devtools/javascript)
 
 ---
 
